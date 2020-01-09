@@ -6,19 +6,25 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.otus.shop.db.entity.Address;
 import ru.otus.shop.db.entity.Order;
 import ru.otus.shop.db.entity.Product;
 import ru.otus.shop.db.entity.ProductQuantity;
 import ru.otus.shop.dto.OrderDTO;
+import ru.otus.shop.enums.OrderStatus;
+import ru.otus.shop.exception.DocumentsByFieldsNotFoundException;
+import ru.otus.shop.mapper.AddressMapper;
 import ru.otus.shop.mapper.OrderMapper;
 import ru.otus.shop.service.OrderService;
 import ru.otus.shop.service.ProductService;
+import ru.otus.shop.web.request.address.AddressCreateRequest;
 import ru.otus.shop.web.request.orders.OrderCreateRequest;
 import ru.otus.shop.web.request.orders.OrderUpdateRequest;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +39,8 @@ public class OrderController {
     private ProductService productService;
 
     private OrderMapper mapper;
+
+    private AddressMapper addressMapper;
 
     @GetMapping
     @ApiOperation("Возвращает список заказов")
@@ -52,7 +60,7 @@ public class OrderController {
                             .quantity(v.getQuantity()).build();
                 }).collect(Collectors.toList()))
                 .dateCreated(LocalDateTime.now())
-                .status("Заказ создан")
+                .status(OrderStatus.CREATED)
                 .build();
 
         OrderDTO orderDTO = mapper.toDto(orderService.create(order));
@@ -70,6 +78,23 @@ public class OrderController {
                     .quantity(v.getQuantity()).build();
         }).collect(Collectors.toList()));
         order.setDateUpdate(LocalDateTime.now());
+        OrderDTO orderDTO = mapper.toDto(orderService.updateById(orderId, order));
+        return ResponseEntity.ok(orderDTO);
+    }
+
+    @PatchMapping("/{orderId}")
+    @ApiOperation("Добавить адресс  доставки")
+    public ResponseEntity<OrderDTO> addressed(@NotNull @PathVariable Long orderId,
+                                              @NotNull @RequestBody @ApiParam("Запрос добавления адреса доставки") AddressCreateRequest request) {
+        Order order = orderService.getById(orderId);
+        if (!order.getStatus().equals(OrderStatus.CREATED)) {
+            throw new DocumentsByFieldsNotFoundException(Order.class.getName(), Collections.singletonMap("status", OrderStatus.CREATED.getDescription()));
+        }
+
+        Address address = addressMapper.toEntity(request);
+        order.setAddress(address);
+        order.setDateUpdate(LocalDateTime.now());
+        order.setStatus(OrderStatus.ADDRESSED);
         OrderDTO orderDTO = mapper.toDto(orderService.updateById(orderId, order));
         return ResponseEntity.ok(orderDTO);
     }

@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 @ApiModel("Количеств ед. товара")
-public class ProductQuantityDTO {
+public class ProductQuantityDTO implements SDto {
 
     @ApiModelProperty("Идентификатор товара")
     private String productId;

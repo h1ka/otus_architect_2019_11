@@ -5,10 +5,13 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import ru.otus.shop.db.entity.Address;
+import ru.otus.shop.enums.OrderStatus;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -35,9 +38,11 @@ public class OrderDTO implements SDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dateUpdate;
 
-    //Todo :: enum with statuses
     @ApiModelProperty(value = "Статус заказа")
-    private String status;
+    private OrderStatus status;
+
+
+    private Address address;
 
     @Valid
     private List<ProductQuantityDTO> products = new ArrayList<>();

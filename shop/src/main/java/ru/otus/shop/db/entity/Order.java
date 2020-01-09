@@ -2,9 +2,11 @@ package ru.otus.shop.db.entity;
 
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
+import ru.otus.shop.enums.OrderStatus;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +32,11 @@ public class Order implements SEntity {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dateUpdate;
 
-    private String status;
+    @NotNull
+    private OrderStatus status;
+
+    @OneToOne(cascade = ALL)
+    private Address address;
 
     @Valid
     @OneToMany(cascade = ALL)

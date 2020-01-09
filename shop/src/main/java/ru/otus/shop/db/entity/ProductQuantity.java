@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 @Entity(name = "product_quantity")
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ProductQuantity {
+public class ProductQuantity implements SEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
