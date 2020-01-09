@@ -7,6 +7,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import ru.otus.shop.db.entity.Order;
 import ru.otus.shop.db.repository.OrderRepository;
+import ru.otus.shop.db.repository.ProductQuantityRepository;
 import ru.otus.shop.exception.DocumentNotFoundException;
 import ru.otus.shop.service.OrderService;
 

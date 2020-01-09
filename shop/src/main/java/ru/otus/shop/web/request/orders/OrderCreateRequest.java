@@ -1,9 +1,10 @@
 package ru.otus.shop.web.request.orders;
 
 import io.swagger.annotations.ApiModel;
-import lombok.Data;
+import lombok.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -11,5 +12,5 @@ import java.util.List;
 public class OrderCreateRequest {
 
     @Valid
-    private List<ProductQuantityRequest> products;
+    private List<ProductQuantityRequest> products = new ArrayList<>();
 }

@@ -1,15 +1,15 @@
 package ru.otus.shop.db.entity;
 
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.persistence.CascadeType.ALL;
 
 /**
  * Сущность заказ
@@ -24,11 +24,13 @@ public class Order implements SEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dateCreated;
 
     private String status;
 
     @Valid
+    @OneToMany(cascade = ALL)
     private List<ProductQuantity> products = new ArrayList<>();
 
 }

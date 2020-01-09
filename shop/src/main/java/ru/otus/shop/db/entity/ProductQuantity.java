@@ -2,8 +2,7 @@ package ru.otus.shop.db.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.validation.constraints.NotBlank;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -12,7 +11,15 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProductQuantity {
-    @NotBlank
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    private Order orderId;
+
+    @NotNull
     private Long productId;
 
     @NotNull
