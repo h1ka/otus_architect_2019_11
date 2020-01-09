@@ -29,6 +29,12 @@ public class OrderDTO implements SDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dateCreated;
 
+
+    @ApiModelProperty(value = "Дата изменения", example = "2019-12-31 23:59:59")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime dateUpdate;
+
     //Todo :: enum with statuses
     @ApiModelProperty(value = "Статус заказа")
     private String status;

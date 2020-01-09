@@ -41,6 +41,7 @@ public interface OrderService {
      *
      * @param orderId Идентификатор заказа
      * @param order   заказ
+     * @return обновленный заказ
      */
-    void updateById(Long orderId, Order order);
+    Order updateById(Long orderId, Order order);
 }

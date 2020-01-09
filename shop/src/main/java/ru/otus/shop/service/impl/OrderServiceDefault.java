@@ -7,7 +7,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import ru.otus.shop.db.entity.Order;
 import ru.otus.shop.db.repository.OrderRepository;
-import ru.otus.shop.db.repository.ProductQuantityRepository;
 import ru.otus.shop.exception.DocumentNotFoundException;
 import ru.otus.shop.service.OrderService;
 
@@ -42,9 +41,9 @@ public class OrderServiceDefault implements OrderService {
     }
 
     @Override
-    public void updateById(Long orderId, Order order) {
+    public Order updateById(Long orderId, Order order) {
         Order orderEntity = getById(orderId);
         BeanUtils.copyProperties(order, orderEntity, "id");
-        orderRepository.save(orderEntity);
+        return orderRepository.save(orderEntity);
     }
 }

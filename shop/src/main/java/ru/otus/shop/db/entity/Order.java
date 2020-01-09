@@ -27,6 +27,9 @@ public class Order implements SEntity {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime dateCreated;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime dateUpdate;
+
     private String status;
 
     @Valid

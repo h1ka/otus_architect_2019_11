@@ -14,6 +14,7 @@ import ru.otus.shop.mapper.OrderMapper;
 import ru.otus.shop.service.OrderService;
 import ru.otus.shop.service.ProductService;
 import ru.otus.shop.web.request.orders.OrderCreateRequest;
+import ru.otus.shop.web.request.orders.OrderUpdateRequest;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -33,9 +34,9 @@ public class OrderController {
 
     private OrderMapper mapper;
 
-    @GetMapping("/all")
-    @ApiOperation("Возвращает список всех заказов")
-    public ResponseEntity<List<OrderDTO>> getAll() {
+    @GetMapping
+    @ApiOperation("Возвращает список заказов")
+    public ResponseEntity<List<OrderDTO>> getByFilter() {
         List<Order> allOrders = orderService.getAllOrders();
         return ResponseEntity.ok(mapper.createDTOs(allOrders));
     }
@@ -58,4 +59,18 @@ public class OrderController {
         return ResponseEntity.ok(orderDTO);
     }
 
+    @PutMapping("/{orderId}")
+    @ApiOperation("Обновление заказа")
+    public ResponseEntity<OrderDTO> update(@NotNull @PathVariable Long orderId,
+                                           @Valid @NotNull @RequestBody @ApiParam("Запрос обновления заказа") OrderUpdateRequest request) {
+        Order order = orderService.getById(orderId);
+        order.setProducts(request.getProducts().stream().map(v -> {
+            Product product = productService.getById(v.getProductId());
+            return ProductQuantity.builder().productId(product.getId())
+                    .quantity(v.getQuantity()).build();
+        }).collect(Collectors.toList()));
+        order.setDateUpdate(LocalDateTime.now());
+        OrderDTO orderDTO = mapper.toDto(orderService.updateById(orderId, order));
+        return ResponseEntity.ok(orderDTO);
+    }
 }
